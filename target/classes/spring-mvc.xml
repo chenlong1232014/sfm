@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/context 
+		http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<context:component-scan base-package="edu.fjnu.sfm.action"></context:component-scan>
+
+
+	<!--<mvc:annotation-driven validator="validator"></mvc:annotation-driven> -->
+
+	<!-- 上传文件的设置 ，maxUploadSize=-1，表示无穷大。uploadTempDir为上传的临时目录 <bean id="multipartResolver" 
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver"> 
+		<property name="maxUploadSize" value="1048576000000"></property> <property 
+		name="defaultEncoding" value="UTF-8"></property> <property name="maxInMemorySize" 
+		value="40960"></property> </bean> -->
+
+	<!-- 第一种：设置静态资源的访问 -->
+	<!-- <mvc:default-servlet-handler/> -->
+	<!-- 第二种：设置静态资源的访问 -->
+	<mvc:resources location="/img/" mapping="/img/**"></mvc:resources>
+	<mvc:resources location="/assets/" mapping="/assets/**"></mvc:resources>
+	<mvc:resources location="/js/" mapping="/js/**"></mvc:resources>
+	<mvc:resources location="/css/" mapping="/css/**"></mvc:resources>
+	<mvc:resources location="/html/" mapping="/html/**"></mvc:resources>
+	<mvc:resources location="/fonts/" mapping="/fonts/**"></mvc:resources>
+	<mvc:annotation-driven />
+
+	<!-- 校验框架 <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" 
+		> <property name="providerClass" value="org.hibernate.validator.HibernateValidator"/> 
+		<property name="validationMessageSource" ref="validatorMessage" /> </bean> 
+		校验信息提示文件位置 <bean id="validatorMessage" class="org.springframework.context.support.ReloadableResourceBundleMessageSource"> 
+		<property name="basenames"> <list> <value>classpath:user</value> </list> 
+		</property> <property name="fileEncodings" value="UTF-8"></property> <property 
+		name="cacheSeconds" value="120"></property> </bean> -->
+
+	<!-- 国际化 <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource"> 
+		<property name="basename" value="resource" /> <property name="useCodeAsDefaultMessage" 
+		value="true" /> </bean> -->
+
+
+	<!-- 页面View层基本信息设定 -->
+	<bean id="defaultViewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/html/"></property>
+		<property name="suffix" value=".jsp" />
+	</bean>
+	<!--<bean class="org.springframework.web.servlet.view.BeanNameViewResolver"> 
+		<property name="order" value="10"></property> </bean> -->
+	<bean
+		class="org.springframework.web.servlet.view.json.MappingJackson2JsonView">
+		<property name="jsonpParameterNames">
+			<set>
+				<value>total</value>
+				<value>rows</value>
+			</set>
+		</property>
+	</bean>
+	<bean
+		class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
+		depends-on="lifecycleBeanPostProcessor" />
+
+
+	<bean
+		class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+		<property name="securityManager" ref="securityManager" />
+	</bean>
+	
+	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+   <property name="exceptionMappings">
+      <props>
+         <prop key="org.apache.shiro.authz.UnauthorizedException">error</prop>  
+         <prop key="java.lang.Throwable">error</prop>
+      </props>
+   </property>
+</bean>
+
+</beans>

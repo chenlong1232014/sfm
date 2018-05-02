@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="sfm Maven Webapp"
+  id="myeclipse.1517541131264"
+  context-root="/sfm"
+  j2ee-spec="5.0"
+  archive="sfm Maven Webapp.war">
+  <attributes>
+    <attribute name="webrootdir" value="src/main/webapp" />
+  </attributes>
+</project-module>
+
